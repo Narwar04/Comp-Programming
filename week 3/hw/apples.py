@@ -1,10 +1,25 @@
-import numpy as np
+# Read the grid dimensions
+rows, cols = map(int, input().split())
 
-row, col = map(int, input().split())
+# Read the grid
+grid = [list(input().strip()) for _ in range(rows)]
 
-tree_array = np.zeros((row, col))
+# Apply gravity
+for col in range(cols):
+    # Start from the bottom of the column
+    bottom = rows - 1
+    for row in range(rows - 1, -1, -1):
+        if grid[row][col] == '#':
+            # Obstacle found, update the bottom position
+            bottom = row - 1
+        elif grid[row][col] == 'a':
+            # Apple found, move it to the bottom position
+            if row != bottom:
+                grid[bottom][col] = 'a'
+                grid[row][col] = '.'
+            # Update the bottom position
+            bottom -= 1
 
-for i in range(row):
-    for j in range(col):
-        tree_array[i][j] = str(input().strip().strip())
-print (tree_array)
+# Print the final grid
+for row in grid:
+    print(''.join(row))

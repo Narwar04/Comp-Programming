@@ -1,42 +1,45 @@
-
 definitions = {}
 
-good = True
-while good:
-    command = input().strip()
-    if not command:
-        continue
-    if command.startswith('def'):
-       _ , var, val = command.split()
-       definitions[var] = int(val)
+while True:
+    try:
+        command = input().strip()
+        if not command:
+            continue
 
-    elif command.startswith('calc'):
-        parts = command.split()
-        calc_parts = parts[1:-1]
-        result = 0
-        unknown = False
-        current_op = "+"
+        if command.startswith('def'):
+            _, var, val = command.split()
+            definitions[var] = int(val)
 
-        for part in calc_parts:
-            if part in ["+", "-"]:
-                current_op = part
-            else:
-                if part not in definitions:
-                    unknown = True
-                    break
-                if current_op == "+":
-                    result += definitions[part]
+        elif command.startswith('calc'):
+            parts = command.split()
+            calc_parts = parts[1:-1]
+            result = 0
+            unknown = False
+            current_op = "+"
+
+            for part in calc_parts:
+                if part in ["+", "-"]:
+                    current_op = part
                 else:
-                    result -= definitions[part]
+                    if part not in definitions:
+                        unknown = True
+                        break
+                    if current_op == "+":
+                        result += definitions[part]
+                    else:
+                        result -= definitions[part]
 
-        if unknown:
-            print(" ".join(calc_parts) + " = unknown")
-        else:
-            reverse_lookup = {v: k for k, v in definitions.items()}
-            if result in reverse_lookup:
-                print(" ".join(calc_parts) + " = " + reverse_lookup[result])
-            else:
+            if unknown:
                 print(" ".join(calc_parts) + " = unknown")
-    else:
-        definitions.clear()
-        good = False
+            else:
+                reverse_lookup = {v: k for k, v in definitions.items()}
+                if result in reverse_lookup:
+                    print(" ".join(calc_parts) + " = " + reverse_lookup[result])
+                else:
+                    print(" ".join(calc_parts) + " = unknown")
+
+        elif command == "clear":
+            definitions.clear()
+
+    except EOFError:
+        break
